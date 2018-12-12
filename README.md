@@ -14,3 +14,7 @@ npm i -D webpack-cli
 ```
 npm start
 ```
+View the page at: 
+```
+localhost:7700
+```
