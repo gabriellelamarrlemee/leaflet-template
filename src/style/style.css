@@ -1,4 +1,31 @@
+@font-face {
+    font-family: 'SourceSans';
+    src: url('./SourceSansPro-Regular.ttf') format('ttf');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SourceSans';
+    src: url('./SourceSansPro-Bold.ttf') format('ttf');
+    font-weight: 900;
+    font-style: bold;
+}
+
+@font-face {
+    font-family: 'SourceSans';
+    src: url('./SourceSansPro-Light.ttf') format('ttf');
+    font-weight: 300;
+    font-style: lighter;
+}
+
+body {
+  font-family: 'SourceSans', sans-serif !important;
+}
+
 h1 {
+  font-size: 1rem !important;
+  font-weight: 900 !important;
 }
 
 #map { height: 400px; }

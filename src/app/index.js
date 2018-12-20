@@ -2,20 +2,20 @@ import * as d3 from 'd3';
 import * as topojson from "topojson-client";
 import '../style/style.css';
 import 'bootstrap/dist/css/bootstrap.css';
+var titleCase = require('./modules/titleCase');
 
+// Basemap options
 var base = {
   'Empty': L.tileLayer(''),
   'OpenStreetMap': L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  'attribution': 'Map data &copy; OpenStreetMap contributors'}),
+    'attribution': 'Map data &copy; OpenStreetMap contributors'}),
   'EsriTopographic': L.esri.basemapLayer('Topographic')
 }
 
 // Set up the map
-var map = L.map('map', {
-  'layers':[base.Empty],
-  zoomControl:false
-}).setView([41.8781, -87.6298], 10);
+var map = L.map('map', {'layers':[base.Empty],zoomControl:false}).setView([41.8781, -87.6298], 10);
 
+// Disable map dragging
 map.dragging.disable();
     map.touchZoom.disable();
     map.doubleClickZoom.disable();
@@ -36,15 +36,13 @@ var linearGradient = defs.append("linearGradient")
 
 //Horizontal gradient
 linearGradient
-    .attr("x1", "0%")
-    .attr("y1", "0%")
-    .attr("x2", "100%")
-    .attr("y2", "0%");
+    .attr("x1", "0%").attr("y1", "0%")
+    .attr("x2", "100%").attr("y2", "0%");
 
 var g = svg.append("g");
 var caLayer, cpsLayer, commLayer;
 
-var getColor = d3.scaleLinear().range(["#007AFF", '#FFF500']);
+var getColor = d3.scaleLinear().range(["#FFF500", "#007AFF"]);
 var keyXScale = d3.scaleLinear().range([0, keyWidth-20]);
 
 function polyStyle(feature) {
@@ -60,9 +58,7 @@ function polyStyle(feature) {
 var pointStyle = {
     radius: 3,
     fillColor: "#000",
-    // color: "#000",
     weight: 0,
-    // opacity: 1,
     fillOpacity: 0.5
 };
 
@@ -77,7 +73,6 @@ function highlightFeature(e) {
     });
 
     infoUpdate(layer.feature.properties);
-    // info.update(layer.feature.properties);
 
     if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
         layer.bringToFront();
@@ -86,7 +81,6 @@ function highlightFeature(e) {
 
 function resetHighlight(e) {
     caLayer.resetStyle(e.target);
-    // info.update();
     infoUpdate();
 }
 
@@ -98,30 +92,11 @@ function onEachFeature(feature, layer) {
     layer.on({
         mouseover: highlightFeature,
         mouseout: resetHighlight
-        // click: zoomToFeature
     });
 }
 
-// var info = L.control();
-//
-// info.onAdd = function (map) {
-//     this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
-//     this.update();
-//     return this._div;
-// };
-//
-// // method that we will use to update the control based on feature properties passed
-// info.update = function (props) {
-//     this._div.innerHTML = (props ?
-//         '<b>' + props.community + '</b><br />' + props.Enrollment + ' pre-k enrollment'
-//         : 'Hover over a community area');
-// };
-//
-// info.addTo(map);
-
 var infoUpdate = function (props) {
-  d3.select('#legend-header').text(props?props.community:'Hover over a community area');
-  d3.select('#legend-value').text(props?props.Enrollment:'');
+  d3.select('#sidebar-header').text(props ? titleCase(props.community) + ': ' + props.Enrollment : 'Hover over a community area');
 };
 
 
@@ -188,27 +163,8 @@ Promise.all([
     .style('text-anchor','end');
 
 
-  // Add discrete legend
-  // var legend = L.control({position: 'bottomright'});
-  //
-  // legend.onAdd = function (map) {
-  //
-  //     var div = L.DomUtil.create('div', 'info legend'),
-  //         grades = [minEnrollment, (maxEnrollment-minEnrollment)/2, maxEnrollment],
-  //         labels = [];
-  //
-  //     // loop through our density intervals and generate a label with a colored square for each interval
-  //     for (var i = 0; i < grades.length; i++) {
-  //       console.log(grades[i]);
-  //       console.log(getColor(grades[i]));
-  //         div.innerHTML +=
-  //             '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
-  //             grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
-  //     }
-  //
-  //     return div;
-  // };
-
-
-
 });
+
+
+// TO DO
+// Add toggle buttons for seeing different views of the map ie. enrollment, pct. full, comm vs. cps
