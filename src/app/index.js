@@ -104,9 +104,9 @@ var infoUpdate = function (props) {
 Promise.all([
   d3.json('data/cps_programs.geojson'),
   d3.json('data/community_programs_utf.geojson'),
-  d3.json('data/all_ca_enrollment.geojson')
+  d3.json('data/all_prek.geojson')
 ]).then(([cps, comm, ca]) =>  {
-
+  
   console.log(cps);
   console.log(comm);
   console.log(ca);
